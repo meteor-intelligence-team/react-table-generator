@@ -14,6 +14,12 @@ export default class TableGenerator extends Component {
     return ( typeof value === "string" );
   }
 
+  getCellContent( col, entry ){
+    if (typeof col === "string") return entry[col];
+    else if ( typeof col.property === "string" ) return entry[col.property];
+    else return (<col.as {...entry} {...col.additionalProps}/>)
+  }
+
   render(){
     const { title, columns, entries, tableProps } = this.props;
 
@@ -26,8 +32,8 @@ export default class TableGenerator extends Component {
         <Table basic='very' celled {...tableProps}>
           <Table.Header>
             <Table.Row>
-              {columns.map(col=>
-                <Table.HeaderCell key={col}>
+              {columns.map((col, index)=>
+                <Table.HeaderCell key={index}>
                   {this.strOrComp( col )
                     ? col
                     : col.name
@@ -39,12 +45,9 @@ export default class TableGenerator extends Component {
           <Table.Body>
             {entries.map(entry=>
               <Table.Row key={entry._id}>
-                {columns.map(col=>
-                  <Table.Cell key={col}>
-                    {this.strOrComp( col )
-                      ? entry[col]
-                      : <col.as {...entry} {...col.additionalProps}/>
-                    }
+                {columns.map((col, index) =>
+                  <Table.Cell key={index}>
+                    {this.getCellContent(col, entry)}
                   </Table.Cell>
                 )}
               </Table.Row>
@@ -67,6 +70,10 @@ TableGenerator.propTypes = {
                     PropTypes.shape({
                       name  : PropTypes.string,
                       as    : PropTypes.func // React Component Proto
+                    }),
+                    PropTypes.shape({
+                        name  : PropTypes.string,
+                        property    : PropTypes.string
                     })
                   ]))
                 .isRequired,
