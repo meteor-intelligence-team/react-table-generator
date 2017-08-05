@@ -17,7 +17,7 @@ export default class TableGenerator extends Component {
   getCellContent( col, entry ){
     if (typeof col === "string") return entry[col];
     else if ( typeof col.property === "string" ) return entry[col.property];
-    else return (<col.as {...entry} {...col.additionalProps}/>)
+    else return (<col.as property={col.property} {...entry} {...col.additionalProps}/>)
   }
 
   render(){
@@ -68,8 +68,9 @@ TableGenerator.propTypes = {
                   PropTypes.oneOfType([
                     PropTypes.string,
                     PropTypes.shape({
-                      name  : PropTypes.string,
-                      as    : PropTypes.func // React Component Proto
+                      property  : PropTypes.string
+                      name      : PropTypes.string,
+                      as        : PropTypes.func // React Component Proto
                     }),
                     PropTypes.shape({
                         name  : PropTypes.string,
