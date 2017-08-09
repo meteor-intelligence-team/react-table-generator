@@ -15,11 +15,17 @@ export default class TableGenerator extends Component {
   }
 
   getCellContent( col, entry ){
+    console.log( "col", col);
+    console.log( "entry", entry);
+
     if ( typeof col === "string" ) {
+      console.log("1");
        return entry[col];
     } else if ( typeof col.property === "string" && !col.as ) {
+      console.log("2");
       return entry[col.property];
     } else {
+      console.log("3");
       return ( <col.as property={col.property} {...entry} {...col.additionalProps}/> );
     }
   }
